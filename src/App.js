@@ -1,25 +1,38 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import { Box } from '@mui/material';
+
+import SideMenu from './layout/SideMenu';
+import Header from './layout/Header';
+import { Routes, Route } from 'react-router-dom';
+import ComplaintDetails from './components/ComplaintDetails';
+import ComplaintDetailsEdit from './components/ComplaintDetailsEdit';
+import { drawerWidth } from './constants/Layout';
 
 function App() {
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Box sx={{ display: 'flex' }}>
+        <SideMenu />
+        {/* <Box sx={{ flexGrow: 1 }}>
+          <Header />
+        </Box> */}
+      </Box>
+      <Box component="main" sx={{ flexGrow: 1, ml: `${drawerWidth}px` }}>
+        <Header />
+        <Routes>
+          <Route path="/" element={<ComplaintDetails />} />
+          <Route path="/complaints" element={<ComplaintDetails />} />
+          <Route path="/complaints/edit/:id" element={<ComplaintDetailsEdit />} />
+        </Routes>
+      </Box>
+
+    </>
   );
 }
 
 export default App;
+
+
