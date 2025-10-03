@@ -19,13 +19,14 @@ const Login: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
+        const loginUrl = process.env.REACT_APP_LOGIN_URL;
         if (username === "" || password === "") {
             setError("Username and password are required.");
             return;
         }
         try {
             const response = await axios.post(
-                "http://52.172.171.41/ccu/companies/login",
+                loginUrl+"ccu/companies/login",
                 { userId: username, password }, 
                 {
                     withCredentials: false,
@@ -49,7 +50,7 @@ const Login: React.FC = () => {
                 if (response.data && response.data.userDetails) {
                     localStorage.setItem("userDetails", JSON.stringify(response.data.userDetails));
                 }
-                navigate("/");
+                navigate("/complaints"); // <-- redirect to complaints page
             } else {
                 setError(response.data?.message || "Invalid username or password.");
             }
@@ -90,7 +91,7 @@ const Login: React.FC = () => {
                             onChange={e => setPassword(e.target.value)}
                         />
                         {error && <Typography color="error">{error}</Typography>}
-                        <Button type="submit" variant="contained" fullWidth sx={{ background: '#1576BD' }}>
+                        <Button type="submit" variant="contained" fullWidth sx={{ background: '#1576BD', padding: 1.5, fontSize: '16px' }}>
                             Login
                         </Button>
                     </Stack>

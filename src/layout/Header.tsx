@@ -37,7 +37,7 @@ const Header = () => {
           </Typography>
           <IconButton onClick={handleMenu} size="large" sx={{ ml: 2 }}>
             <Avatar>
-              <AccountCircleIcon />
+              <AccountCircleIcon sx={{ fontSize: 40 }} />
             </Avatar>
           </IconButton>
           <Menu
