@@ -28,7 +28,7 @@ const SideMenu = () => {
             <Box
                 component={'img'}
                 sx={styles.appLogo}
-                src='/ondc/logo.png'
+                src='/ondc-dashboard/logo.png'
                 alt="Logo"
             />
 

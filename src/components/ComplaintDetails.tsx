@@ -7,7 +7,7 @@ import { useState } from "react";
 
 const ComplaintDetails: React.FC = () => {
     const navigate = useNavigate();
-    const { filteredData, loading, handleSearch } = useComplaintDetailsListFetch();
+    const { filteredData, loading, handleSearch, submitError} = useComplaintDetailsListFetch();
     const [open, setOpen] = useState(false);
     const [popupContent, setPopupContent] = useState<string>("");
 
@@ -56,7 +56,7 @@ const ComplaintDetails: React.FC = () => {
     ];
 
     const handleRowClick = (params: any) => {
-        console.log("Row clicked:", params, params.row);
+        // console.log("Row clicked:", params, params.row);
         const complaintId = params.id;
         navigate(`/complaints/edit/${complaintId}`); // Redirects to edit page
     };
@@ -65,8 +65,14 @@ const ComplaintDetails: React.FC = () => {
         <>
             <Box sx={{ pl: 5, mr: 5, mt: 5, backgroundColor: '#F1F2F7', borderRadius: 2 }}>
                 <h3>Complaint Details</h3>
-                <SearchComponent onSearch={handleSearch} />
-                {loading ? <p>Loading...</p> : (
+                {!submitError && (<SearchComponent onSearch={handleSearch} />)}
+                {loading ? (
+                    <p>Loading...</p>
+                ) : submitError ? (
+                    <Typography color="error" sx={{ mt: 4, fontSize: 18 }}>
+                        {submitError}
+                    </Typography>
+                ) : (
                     <DataGrid
                         rows={filteredData}
                         columns={columns}
@@ -74,7 +80,12 @@ const ComplaintDetails: React.FC = () => {
                             pagination: { paginationModel: { pageSize: 10 } },
                         }}
                         pageSizeOptions={[10, 25, 50]}
-                        onRowClick={(params) => handleRowClick(params.row)} />
+                        onRowClick={(params) => handleRowClick(params.row)}
+                        sx={{
+                            "& .MuiDataGrid-row:hover": {
+                                cursor: "pointer"
+                            }
+                        }} />
                 )}
             </Box>
             <Dialog open={open} onClose={handleClosePopup} maxWidth="md" fullWidth>

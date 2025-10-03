@@ -13,18 +13,33 @@ const useComplaintDetailsListFetch = () => {
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [submitResponse, setSubmitResponse] = useState<any>(null);
 
-    useEffect(() => {
-        axios.get(baseUrl + "OnIssue")
-            .then(response => {
-                setData(response.data);
-                setFilteredData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
+useEffect(() => {
+    const token = localStorage.getItem("token");
+    let timestamp = new Date().getTime();
+    axios.get(baseUrl + "OnIssue", {
+        headers: {
+            'client-type':  "2",
+            'timestamp': `${timestamp}`,
+            'signature':`jwt ${token}`,
+            'Pragma': 'no-cache',
+            'Cache-Control': 'no-cache, no-store',
+            'Expires': '0'
+        },
+    })
+        .then(response => {
+            setData(response.data);
+            setFilteredData(response.data);
+            setLoading(false);
+        })
+        .catch(error => {
+            if (error.response && error.response.status === 403) {
+                setSubmitError("You don't have privilege.");
+            } else {
                 console.error("Error fetching complaints:", error);
-                setLoading(false);
-            });
-    }, []);
+            }
+            setLoading(false);
+        });
+}, []);
 
     const handleSearch = (query: string) => {
         setFilteredData(data.filter(item => item.issueId.toLowerCase().includes(query.toLowerCase())));
